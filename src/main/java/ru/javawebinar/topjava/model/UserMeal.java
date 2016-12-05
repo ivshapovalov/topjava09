@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.model;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  * GKislin
@@ -21,6 +22,10 @@ public class UserMeal {
 
     public LocalDateTime getDateTime() {
         return dateTime;
+    }
+
+    public LocalTime getTime() {
+        return dateTime.toLocalTime();
     }
 
     public String getDescription() {
