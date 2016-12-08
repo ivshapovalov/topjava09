@@ -52,33 +52,6 @@ public class UserMealsUtil {
 
     public static List<UserMealWithExceed> getFilteredWithExceeded(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
 
-        //***************Решение через циклы*********************
-
-//        Map<LocalDate, Integer> groupedDatesbyDate = new HashMap<>();
-//        for (UserMeal meal : mealList
-//                ) {
-//            Integer existingDates = groupedDatesbyDate.get(meal.getDate());
-//            if (existingDates != null) {
-//                groupedDatesbyDate.put(meal.getDate(), existingDates + meal.getCalories());
-//            } else {
-//                groupedDatesbyDate.put(meal.getDate(), meal.getCalories());
-//            }
-//        }
-//
-//        List<UserMealWithExceed> userMealWithExceedList = new ArrayList<>();
-//        for (UserMeal meal : mealList
-//                ) {
-//            if (TimeUtil.isBetween(meal.getTime(), startTime, endTime)) {
-//                boolean isExceed = groupedDatesbyDate.get(meal.getDate()) > caloriesPerDay ? true : false;
-//                userMealWithExceedList.add(new
-//                        UserMealWithExceed(meal
-//                        .getDateTime(),
-//                        meal.getDescription(), meal.getCalories(),
-//                        isExceed));
-//            }
-//
-//        }
-
         /***************Решение через Stream API******************/
         Map<LocalDate, Integer> groupedDatesbyDate =
                 mealList.stream()
