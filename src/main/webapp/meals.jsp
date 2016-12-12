@@ -13,10 +13,13 @@
 
     <thead>
     <tr>
-        <th>Number</th>
+        <th>№</th>
+        <th>ID</th>
         <th>DateTime</th>
         <th>Description</th>
         <th>Calories</th>
+        <th>EDIT</th>
+        <th>DELETE</th>
     </tr>
 
     </thead>
@@ -32,9 +35,25 @@
         </c:choose>
         <tr bgcolor='${color}'>
             <td><c:out value="${num}"/></td>
+            <td>${row.id}</td>
             <td>${row.getDateTimeAsString()}</td>
             <td>${row.description}</td>
             <td>${row.calories}</td>
+
+                <td><a href="meals/editmeal?id=${row.id}">edit</a><br></td>
+                <td><a href="meals/deletemeal?id=${row.id}">delete</a><br></td>
+            <%--<td>--%>
+                <%--<button onclick="location.href='editmeal?id=${row.id}'"--%>
+                        <%--type="button">--%>
+                    <%--edit--%>
+                <%--</button>--%>
+            <%--</td>--%>
+            <%--<td>--%>
+                <%--<button onclick="location.href='deletemeal?id=${row.id}'"--%>
+                        <%--type="button">--%>
+                    <%--delete--%>
+                <%--</button>--%>
+            <%--</td>--%>
         </tr>
         <c:set var="num" value="${num+1}"/>
     </c:forEach>

@@ -1,8 +1,10 @@
 package ru.javawebinar.topjava.web;
 
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.MealDAO;
 import ru.javawebinar.topjava.model.MealWithExceed;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.util.TimeUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,7 +23,11 @@ import java.util.List;
  */
 public class MealServlet extends HttpServlet {
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    MealDAO dao;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
 
         List<Meal> meals = Arrays.asList(
                 new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),
@@ -38,12 +44,66 @@ public class MealServlet extends HttpServlet {
         );
         List<MealWithExceed> mealsWithExceeded = MealsUtil.getFilteredWithExceeded(meals,
                 LocalTime.of(0,
-                0), LocalTime.of(23, 59), 1500);
-
-
-        request.setAttribute("meals",mealsWithExceeded);
-        request.getRequestDispatcher("/meals.jsp").forward(request, response);
+                        0), LocalTime.of(23, 59), 1500);
+        dao = new MealDAO(mealsWithExceeded);
     }
 
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        String path = getAction(req);
+
+        if (path.startsWith("/meals/editmeal")) {
+            int id = Integer.valueOf(req.getParameter("id"));
+            req.setAttribute("meal", dao.getMealById(id));
+            jsp("/editmeal",req,resp);
+        } else if (path.startsWith("/meals/deletemeal")) {
+            int id = Integer.valueOf(req.getParameter("id"));
+            try {
+                dao.deleteMeal(id);
+                redirect("../meals",resp);
+            } catch (Exception e) {
+                req.setAttribute("message", "Incorrect data. Try again!");
+                jsp("/error",req,resp);
+            }
+        } else if (path.startsWith("/meals")) {
+            req.setAttribute("meals", dao.getMeals());
+            jsp("/meals",req,resp);
+        }
+    }
+
+    private String getAction(HttpServletRequest req) {
+        String requestURI = req.getRequestURI();
+        return requestURI.substring(req.getContextPath().length(), requestURI.length());
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String path = getAction(req);
+        if (path.startsWith("/meals/updatemeal")) {
+            int id = Integer.valueOf(req.getParameter("id"));
+            int calories = Integer.valueOf(req.getParameter("calories"));
+            String description = req.getParameter("description");
+            try {
+            LocalDateTime dateTime = TimeUtil.formatStringToLocalDateTime(req.getParameter
+                    ("dateTime"), "yyyy-MM-dd HH:mm");
+
+                dao.updateMeal(new MealWithExceed(id, dateTime, description, calories));
+                req.setAttribute("message", String.format("Row with id='%s' updated " +
+                        "successfully!",id));
+                jsp("/message",req,resp);
+
+            } catch (Exception e) {
+                req.setAttribute("message", "Incorrect data. Try again!");
+                jsp("/error",req,resp);
+            }
+        }
+
+    }
+    private void jsp(String jsp, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher(jsp + ".jsp").forward(req,resp);
+    }
+
+    private void redirect(String url, HttpServletResponse resp) throws IOException {
+        resp.sendRedirect(resp.encodeRedirectURL(url));
+    }
 }

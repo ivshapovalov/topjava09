@@ -1,5 +1,7 @@
 package ru.javawebinar.topjava.model;
 
+import ru.javawebinar.topjava.util.TimeUtil;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -8,29 +10,41 @@ import java.time.format.DateTimeFormatter;
  * 11.01.2015.
  */
 public class MealWithExceed {
-    private final LocalDateTime dateTime;
+    private int id;
 
-    private final String description;
+    private LocalDateTime dateTime;
 
-    private final int calories;
+    private String description;
 
-    private final boolean exceed;
+    private int calories;
 
-    public MealWithExceed(LocalDateTime dateTime, String description, int calories, boolean exceed) {
+    private boolean exceed;
+
+    public MealWithExceed(LocalDateTime dateTime, String description, int calories, boolean
+            exceed) {
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
         this.exceed = exceed;
     }
 
-    @Override
-    public String toString() {
-        return "UserMealWithExceed{" +
-                "dateTime=" + dateTime +
-                ", description='" + description + '\'' +
-                ", calories=" + calories +
-                ", exceed=" + exceed +
-                '}';
+    public MealWithExceed(int id, LocalDateTime dateTime, String description, int calories) {
+        this.id = id;
+        this.dateTime = dateTime;
+        this.description = description;
+        this.calories = calories;
+    }
+
+    public MealWithExceed(int id) {
+        this.id = id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getDescription() {
@@ -42,9 +56,7 @@ public class MealWithExceed {
     }
 
     public String getDateTimeAsString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
-        String formattedDateTime = dateTime.format(formatter); // "1986-04-08 12:30"
-        return formattedDateTime;
+        return TimeUtil.formatLocalDateTimeToString(dateTime,"yyyy-MM-dd HH:mm");
     }
 
     public int getCalories() {
@@ -53,5 +65,20 @@ public class MealWithExceed {
 
     public boolean isExceed() {
         return exceed;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MealWithExceed that = (MealWithExceed) o;
+
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
     }
 }
