@@ -8,6 +8,8 @@
 </head>
 <body>
 <H1 align="center"> Meal list</H1>
+
+<H2 align="center"> Calories per day: ${caloriesPerDay}</H2>
 <br>
 <table border="1" align="center">
 
@@ -58,5 +60,8 @@
         <c:set var="num" value="${num+1}"/>
     </c:forEach>
 </table>
+<br>
+${message}<br>
+
 </body>
 </html>

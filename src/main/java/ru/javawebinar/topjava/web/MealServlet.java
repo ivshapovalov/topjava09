@@ -1,7 +1,7 @@
 package ru.javawebinar.topjava.web;
 
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.MealDAO;
+import ru.javawebinar.topjava.model.MealDAOInMemory;
 import ru.javawebinar.topjava.model.MealWithExceed;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.util.TimeUtil;
@@ -23,7 +23,8 @@ import java.util.List;
  */
 public class MealServlet extends HttpServlet {
 
-    MealDAO dao;
+    MealDAOInMemory dao;
+    private final int caloriesPerDay=1500;
 
     @Override
     public void init() throws ServletException {
@@ -42,10 +43,8 @@ public class MealServlet extends HttpServlet {
                 new Meal(LocalDateTime.of(2015, Month.JUNE, 02, 8, 0), "Завтрак", 1600),
                 new Meal(LocalDateTime.of(2015, Month.JUNE, 03, 8, 0), "Ужин", 1000)
         );
-        List<MealWithExceed> mealsWithExceeded = MealsUtil.getFilteredWithExceeded(meals,
-                LocalTime.of(0,
-                        0), LocalTime.of(23, 59), 1500);
-        dao = new MealDAO(mealsWithExceeded);
+
+        dao = new MealDAOInMemory(meals);
     }
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -66,7 +65,11 @@ public class MealServlet extends HttpServlet {
                 jsp("/error",req,resp);
             }
         } else if (path.startsWith("/meals")) {
-            req.setAttribute("meals", dao.getMeals());
+            List<MealWithExceed> mealsWithExceeded = MealsUtil.getFilteredWithExceeded(dao.getMeals(),
+                    LocalTime.of(0,
+                            0), LocalTime.of(23, 59), caloriesPerDay);
+            req.setAttribute("meals", mealsWithExceeded);
+            req.setAttribute("caloriesPerDay", caloriesPerDay);
             jsp("/meals",req,resp);
         }
     }
@@ -78,6 +81,7 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
         String path = getAction(req);
         if (path.startsWith("/meals/updatemeal")) {
             int id = Integer.valueOf(req.getParameter("id"));
@@ -87,10 +91,9 @@ public class MealServlet extends HttpServlet {
             LocalDateTime dateTime = TimeUtil.formatStringToLocalDateTime(req.getParameter
                     ("dateTime"), "yyyy-MM-dd HH:mm");
 
-                dao.updateMeal(new MealWithExceed(id, dateTime, description, calories));
-                req.setAttribute("message", String.format("Row with id='%s' updated " +
-                        "successfully!",id));
-                jsp("/message",req,resp);
+                dao.updateMeal(new Meal(id, dateTime, description, calories));
+                redirect("../meals",resp);
+
 
             } catch (Exception e) {
                 req.setAttribute("message", "Incorrect data. Try again!");

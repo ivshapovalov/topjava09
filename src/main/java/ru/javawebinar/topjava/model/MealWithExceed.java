@@ -28,11 +28,13 @@ public class MealWithExceed {
         this.exceed = exceed;
     }
 
-    public MealWithExceed(int id, LocalDateTime dateTime, String description, int calories) {
+    public MealWithExceed(int id, LocalDateTime dateTime, String description, int calories,
+                          boolean exceed) {
         this.id = id;
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
+        this.exceed = exceed;
     }
 
     public MealWithExceed(int id) {
@@ -67,18 +69,5 @@ public class MealWithExceed {
         return exceed;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        MealWithExceed that = (MealWithExceed) o;
-
-        return id == that.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return id;
-    }
 }
