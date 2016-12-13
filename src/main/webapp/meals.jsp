@@ -8,7 +8,6 @@
 </head>
 <body>
 <H1 align="center"> Meal list</H1>
-
 <H2 align="center"> Calories per day: ${caloriesPerDay}</H2>
 <br>
 <table border="1" align="center">
@@ -42,24 +41,37 @@
             <td>${row.description}</td>
             <td>${row.calories}</td>
 
-                <td><a href="meals/editmeal?id=${row.id}">edit</a><br></td>
-                <td><a href="meals/deletemeal?id=${row.id}">delete</a><br></td>
-            <%--<td>--%>
-                <%--<button onclick="location.href='editmeal?id=${row.id}'"--%>
-                        <%--type="button">--%>
-                    <%--edit--%>
-                <%--</button>--%>
-            <%--</td>--%>
-            <%--<td>--%>
-                <%--<button onclick="location.href='deletemeal?id=${row.id}'"--%>
-                        <%--type="button">--%>
-                    <%--delete--%>
-                <%--</button>--%>
-            <%--</td>--%>
+                <%--<td><a href="meals/editmeal?id=${row.id}">edit</a><br></td>--%>
+                <%--<td><a href="meals/deletemeal?id=${row.id}">delete</a><br></td>--%>
+            <td>
+                <button onclick="location.href='meals/meal?id=${row.id}'"
+                        type="button">
+                    edit
+                </button>
+            </td>
+            <td>
+                <button onclick="location.href='meals/deletemeal?id=${row.id}'"
+                        type="button">
+                    delete
+                </button>
+            </td>
         </tr>
         <c:set var="num" value="${num+1}"/>
     </c:forEach>
 </table>
+
+<table border="0" align="center">
+    <tr>
+        <td>
+            <%--<a href="meals/editmeal">new meal</a>--%>
+            <button onclick="location.href='meals/meal'" type="button">New meal</button>
+            <button onclick="location.href='./'" type="button">Main page</button>
+
+        </td>
+    </tr>
+</table>
+
+
 <br>
 ${message}<br>
 

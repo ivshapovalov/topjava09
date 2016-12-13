@@ -6,10 +6,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-/**
- * GKislin
- * 11.01.2015.
- */
 public class Meal {
 
     private int id;
@@ -28,6 +24,11 @@ public class Meal {
 
     public Meal(int id) {
         this.id = id;
+    }
+    public Meal(int id,LocalDateTime dateTime) {
+        this.id = id;
+        this.dateTime = dateTime;
+
     }
 
     public Meal(int id, LocalDateTime dateTime, String description, int calories) {
@@ -65,6 +66,9 @@ public class Meal {
     }
 
     public String getDateTimeAsString() {
+        if (dateTime==null) {
+            return "";
+        }
         return TimeUtil.formatLocalDateTimeToString(dateTime,"yyyy-MM-dd HH:mm");
     }
 
@@ -82,6 +86,5 @@ public class Meal {
     public int hashCode() {
         return id;
     }
-
 
 }

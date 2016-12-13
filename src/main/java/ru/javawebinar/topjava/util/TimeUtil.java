@@ -15,15 +15,13 @@ public class TimeUtil {
 
     public static String formatLocalDateTimeToString(LocalDateTime dateTime,String pattern) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-        String formattedDateTime = dateTime.format(formatter);
-        return formattedDateTime;
+        return dateTime.format(formatter);
     }
 
     public static LocalDateTime formatStringToLocalDateTime(String stringDateTime,String
             pattern) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-        LocalDateTime formattedDateTime = LocalDateTime.parse(stringDateTime,formatter); //
-        return formattedDateTime;
+        return LocalDateTime.parse(stringDateTime,formatter);
 
     }
 }

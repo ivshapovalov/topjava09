@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.web;
 
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.MealDAO;
 import ru.javawebinar.topjava.model.MealDAOInMemory;
 import ru.javawebinar.topjava.model.MealWithExceed;
 import ru.javawebinar.topjava.util.MealsUtil;
@@ -17,13 +18,9 @@ import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * User: gkislin
- * Date: 19.08.2014
- */
 public class MealServlet extends HttpServlet {
 
-    MealDAOInMemory dao;
+    MealDAO dao;
     private final int caloriesPerDay=1500;
 
     @Override
@@ -51,23 +48,35 @@ public class MealServlet extends HttpServlet {
 
         String path = getAction(req);
 
-        if (path.startsWith("/meals/editmeal")) {
-            int id = Integer.valueOf(req.getParameter("id"));
-            req.setAttribute("meal", dao.getMealById(id));
-            jsp("/editmeal",req,resp);
+        if (path.startsWith("/meals/meal")) {
+            Meal meal;
+            String id=req.getParameter("id");
+            if (id==null ||id.equals("")) {
+                meal=dao.createNew();
+            } else {
+                try {
+                    meal = dao.get(Integer.valueOf(id));
+                } catch (NumberFormatException e) {
+                    req.setAttribute("message", "Incorrect id for update. Try again!");
+                    jsp("/error",req,resp);
+                    return;
+                }
+            }
+            req.setAttribute("meal", meal);
+            jsp("/meal",req,resp);
         } else if (path.startsWith("/meals/deletemeal")) {
-            int id = Integer.valueOf(req.getParameter("id"));
+            String id=req.getParameter("id");
             try {
-                dao.deleteMeal(id);
+                dao.delete(Integer.valueOf(id));
                 redirect("../meals",resp);
             } catch (Exception e) {
-                req.setAttribute("message", "Incorrect data. Try again!");
+                req.setAttribute("message",
+                        String.format("Unable to delete meal with id='%s'. Try again!",id));
                 jsp("/error",req,resp);
             }
         } else if (path.startsWith("/meals")) {
-            List<MealWithExceed> mealsWithExceeded = MealsUtil.getFilteredWithExceeded(dao.getMeals(),
-                    LocalTime.of(0,
-                            0), LocalTime.of(23, 59), caloriesPerDay);
+            List<MealWithExceed> mealsWithExceeded = MealsUtil.getFilteredWithExceeded(dao.getAll(),
+                    LocalTime.MIN, LocalTime.MAX, caloriesPerDay);
             req.setAttribute("meals", mealsWithExceeded);
             req.setAttribute("caloriesPerDay", caloriesPerDay);
             jsp("/meals",req,resp);
@@ -83,7 +92,7 @@ public class MealServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         String path = getAction(req);
-        if (path.startsWith("/meals/updatemeal")) {
+        if (path.startsWith("/meals/savemeal")) {
             int id = Integer.valueOf(req.getParameter("id"));
             int calories = Integer.valueOf(req.getParameter("calories"));
             String description = req.getParameter("description");
@@ -91,7 +100,7 @@ public class MealServlet extends HttpServlet {
             LocalDateTime dateTime = TimeUtil.formatStringToLocalDateTime(req.getParameter
                     ("dateTime"), "yyyy-MM-dd HH:mm");
 
-                dao.updateMeal(new Meal(id, dateTime, description, calories));
+                dao.update(new Meal(id, dateTime, description, calories));
                 redirect("../meals",resp);
 
 

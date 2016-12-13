@@ -6,8 +6,8 @@
 <body>
 <H1 align="center"> Meal</H1>
 <br>
-<form action="updatemeal" method="post">
-    <input type="hidden" name="id" value=${meal.id} />
+<form action="savemeal" method="post">
+    <input type="hidden" name="id" value=${meal.id}>
     <table border="1" align="center">
         <tr>
             <td>ID</td>
@@ -26,9 +26,15 @@
             <td>Calories</td>
             <td><input type="number" name='calories' value='${meal.calories}'></td>
         </tr>
+    </table>
+
+    <table border="0" align="center">
         <tr>
-            <td></td>
-            <td><input type="submit" value="update meal"/></td>
+            <td>
+                <input type="submit" value="Save meal"/>
+                <button onclick="location.href='../meals'" type="button">Meals list</button>
+                <button onclick="location.href='../'" type="button">Main page</button>
+            </td>
         </tr>
     </table>
 </form>

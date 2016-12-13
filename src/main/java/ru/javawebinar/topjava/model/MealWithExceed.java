@@ -3,12 +3,7 @@ package ru.javawebinar.topjava.model;
 import ru.javawebinar.topjava.util.TimeUtil;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
-/**
- * GKislin
- * 11.01.2015.
- */
 public class MealWithExceed {
     private int id;
 
