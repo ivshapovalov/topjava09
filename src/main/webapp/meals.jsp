@@ -19,8 +19,8 @@
         <th>DateTime</th>
         <th>Description</th>
         <th>Calories</th>
-        <th>EDIT</th>
-        <th>DELETE</th>
+        <th></th>
+        <th></th>
     </tr>
 
     </thead>
@@ -40,9 +40,6 @@
             <td>${row.getDateTimeAsString()}</td>
             <td>${row.description}</td>
             <td>${row.calories}</td>
-
-                <%--<td><a href="meals/editmeal?id=${row.id}">edit</a><br></td>--%>
-                <%--<td><a href="meals/deletemeal?id=${row.id}">delete</a><br></td>--%>
             <td>
                 <button onclick="location.href='meals/meal?id=${row.id}'"
                         type="button">
@@ -63,15 +60,13 @@
 <table border="0" align="center">
     <tr>
         <td>
-            <%--<a href="meals/editmeal">new meal</a>--%>
             <button onclick="location.href='meals/meal'" type="button">New meal</button>
+            <button onclick="location.href='meals/clear'" type="button">Clear meals</button>
             <button onclick="location.href='./'" type="button">Main page</button>
 
         </td>
     </tr>
 </table>
-
-
 <br>
 ${message}<br>
 

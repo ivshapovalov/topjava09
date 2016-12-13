@@ -52,7 +52,8 @@ public class MealServlet extends HttpServlet {
             Meal meal;
             String id=req.getParameter("id");
             if (id==null ||id.equals("")) {
-                meal=dao.createNew();
+                meal=dao.addNew();
+                resp.sendRedirect("meal?id="+meal.getId());
             } else {
                 try {
                     meal = dao.get(Integer.valueOf(id));
@@ -61,9 +62,10 @@ public class MealServlet extends HttpServlet {
                     jsp("/error",req,resp);
                     return;
                 }
+                req.setAttribute("meal", meal);
+                jsp("/meal",req,resp);
             }
-            req.setAttribute("meal", meal);
-            jsp("/meal",req,resp);
+
         } else if (path.startsWith("/meals/deletemeal")) {
             String id=req.getParameter("id");
             try {
@@ -72,6 +74,15 @@ public class MealServlet extends HttpServlet {
             } catch (Exception e) {
                 req.setAttribute("message",
                         String.format("Unable to delete meal with id='%s'. Try again!",id));
+                jsp("/error",req,resp);
+            }
+        } else if (path.startsWith("/meals/clear")) {
+            try {
+                dao.clear();
+                redirect("../meals",resp);
+            } catch (Exception e) {
+                req.setAttribute("message",
+                        "Unable to clear meals. Try again!");
                 jsp("/error",req,resp);
             }
         } else if (path.startsWith("/meals")) {

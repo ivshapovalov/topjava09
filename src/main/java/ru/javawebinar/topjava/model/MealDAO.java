@@ -10,8 +10,10 @@ public interface MealDAO {
 
     void delete(int id);
 
+    void clear();
+
     Meal get(int id);
 
-    Meal createNew();
+    Meal addNew();
 
 }

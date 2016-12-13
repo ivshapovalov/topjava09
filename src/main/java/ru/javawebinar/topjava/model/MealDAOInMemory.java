@@ -55,14 +55,20 @@ public class MealDAOInMemory implements MealDAO {
     }
 
     @Override
-    public Meal createNew() {
+    public Meal addNew() {
         List<Integer> keys=new ArrayList<>(meals.keySet());
         Collections.sort(keys);
-        if (keys.size()==0) {
-            return new Meal(1,LocalDateTime.now());
-        } else {
-            int maxId=keys.get(keys.size()-1);
-            return new Meal(maxId+1,LocalDateTime.now());
+        int maxId=0;
+        if (keys.size()!=0) {
+           maxId=keys.get(keys.size()-1);
         }
+        Meal newMeal=new Meal(maxId+1,LocalDateTime.now());
+        meals.put(maxId+1,newMeal);
+        return newMeal;
+    }
+
+    @Override
+    public void clear() {
+        meals.clear();
     }
 }
