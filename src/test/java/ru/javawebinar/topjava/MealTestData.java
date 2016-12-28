@@ -29,11 +29,6 @@ public class MealTestData {
             ("2016-12-22 12:00:00"),"Обед",500);
 
 
-    public static final ModelMatcher<Meal> MATCHER = new ModelMatcher<>(new ModelMatcher.Comparator<Meal>() {
-        @Override
-        public boolean compare(Meal expected, Meal actual) {
-            return expected.toString().equals(actual.toString());
-        }
-    });
+    public static final ModelMatcher<Meal> MATCHER = new ModelMatcher<>();
 
 }
