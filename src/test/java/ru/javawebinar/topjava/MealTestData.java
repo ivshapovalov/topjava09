@@ -15,9 +15,7 @@ import static ru.javawebinar.topjava.model.BaseEntity.START_SEQ;
  */
 public class MealTestData {
     public static final int USER1_ID = START_SEQ;
-    public static final int USER2_ID = START_SEQ+2;
-
-    public static final int MEAL_ID = START_SEQ+3;
+    public static final int MEAL_ID = START_SEQ+2;
 
     public static final Meal USER1_MEAL1 = new Meal (MEAL_ID, DateTimeUtil.parseLocalDateTime
             ("2016-12-22 09:00:00"),"Завтрак",2000);
@@ -29,13 +27,6 @@ public class MealTestData {
             ("2016-12-22 18:00:00"),"Ужин",1000);
     public static final Meal USER1_MEAL5 = new Meal (MEAL_ID+4, DateTimeUtil.parseLocalDateTime
             ("2016-12-22 12:00:00"),"Обед",500);
-
-    public static final Meal USER2_MEAL1 = new Meal (MEAL_ID+5, DateTimeUtil.parseLocalDateTime
-            ("2016-12-23 18:00:00"),"Ужин",1000);
-    public static final Meal USER2_MEAL2 = new Meal (MEAL_ID+6, DateTimeUtil.parseLocalDateTime
-            ("2016-12-22 09:00:00"),"Завтрак",2000);
-    public static final Meal USER2_MEAL3 = new Meal (MEAL_ID+7, DateTimeUtil.parseLocalDateTime
-            ("2016-12-23 09:00:00"),"Завтрак",1000);
 
 
     public static final ModelMatcher<Meal> MATCHER = new ModelMatcher<>(new ModelMatcher.Comparator<Meal>() {

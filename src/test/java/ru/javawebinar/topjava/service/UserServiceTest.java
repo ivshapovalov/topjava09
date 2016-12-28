@@ -46,7 +46,7 @@ public class UserServiceTest {
 
     @Test(expected = DataAccessException.class)
     public void testDuplicateMailSave() throws Exception {
-        service.save(new User(null, "Duplicate", "user@yandex.ru", "newPass", Role.ROLE_USER));
+        service.save(new User(null, "Duplicate", "user1@yandex.ru", "newPass", Role.ROLE_USER));
     }
 
     @Test
@@ -73,7 +73,7 @@ public class UserServiceTest {
 
     @Test
     public void testGetByEmail() throws Exception {
-        User user = service.getByEmail("user@yandex.ru");
+        User user = service.getByEmail("user1@yandex.ru");
         MATCHER.assertEquals(USER, user);
     }
 
