@@ -53,7 +53,7 @@ public class MealServiceTest {
         MATCHER.assertEquals(ADMIN_MEAL1, actual);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test(expected = Exception.class)
     public void testGetNotFound() throws Exception {
         service.get(MEAL1_ID, ADMIN_ID);
     }
@@ -65,7 +65,7 @@ public class MealServiceTest {
         MATCHER.assertEquals(updated, service.get(MEAL1_ID, USER_ID));
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test(expected = Exception.class)
     public void testUpdateNotFound() throws Exception {
         service.update(MEAL1, ADMIN_ID);
     }
